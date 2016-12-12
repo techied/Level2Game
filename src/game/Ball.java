@@ -1,8 +1,12 @@
 package game;
 
+import java.awt.Color;
+import java.awt.Graphics;
+
 public class Ball extends GameObject {
 
-	private int velX, velY;
+	private int velX, velY, counter;
+	private boolean inMotion = false;
 	
 	public Ball(int x, int y, int velX, int velY) {
 		this.x = x;
@@ -14,23 +18,41 @@ public class Ball extends GameObject {
 	}
 	
 	public void update() {
-		move();
-		if (x + width + 1 > Game.WIDTH) {
-			velX = -velX;
-			x += velX;
+		counter++;
+		if(inMotion) {
+			move();
+			if (counter > 2) {
+				velY -= Game.GRAVITY;
+				counter = 0;
+			}
 		}
-		if (x < 0 - 1) {
+		System.out.println(x + ", " + y + ", " + velY);
+		if (x + width >= Game.WIDTH) {
 			velX = -velX;
-			x += velX;
 		}
-		if (y + height + 1 > Game.HEIGHT) {
+		if (x <= 0) {
+			velX = -velX;
+		}
+		if (y + height >= Game.HEIGHT) {
 			velY = -velY;
-			y += velY;
+			velY = (int) Math.round((float) (velY * 3 / 4));
+			if (velY == 0) {
+				inMotion = false;
+			}
 		} 
-		if (y < 0 - 1) {
-			velY = -velY;
-			y += velY;
-		}
+		//if (y <= 0) {
+		//	velY = -velY;
+		//	velY += resistance;
+		//}
+	}
+	
+	public void draw(Graphics g) {
+		g.setColor(Color.BLACK);
+		g.fillOval(x, y, width, height);
+	}
+	
+	public void setInMotion(boolean a) {
+		inMotion = a;
 	}
 	
 	private void move() {
