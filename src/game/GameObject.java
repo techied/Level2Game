@@ -1,11 +1,13 @@
 package game;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 
 public class GameObject {
 
 	protected int x, y, width, height;
 	protected boolean isAlive;
+	
 	
 	public GameObject() {
 		isAlive = true;
@@ -23,6 +25,10 @@ public class GameObject {
 	
 	public void draw(Graphics g) {
 		g.fillRect(x, y, width, height);
+	}
+	
+	public void reverseDirection() {
+		
 	}
 	
 }

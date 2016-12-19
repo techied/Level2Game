@@ -17,22 +17,22 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	Timer timer;
 	ObjectManager manager;
 	Ball ball;
-	Goal goal;
-	Line line;
+	Wall wall;
+	boolean left, right;
 	
 	public GamePanel() {
 		timer = new Timer(1000/60, this);
 		manager = new ObjectManager();
 		ball = new Ball(100, 100, 0, 0);
-		goal = new Goal(500, 500, 50, 50);
-		line = new Line(45, 90, 40, 95);
-		manager.add(goal);
+		wall = new Wall(300, 100, 50, 50);
 		manager.add(ball);
-		manager.add(line);
+		manager.add(wall);
+		ball.addWall(wall);
 	}
 	
 	private void update() {
 		manager.update();
+		ball.moveX(right, left);
 	}
 	
 	public void paintComponent(Graphics g) {
@@ -55,12 +55,20 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			ball.setInMotion(true);
+		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			right = true;
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			left = true;
 		}
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			right = false;
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			left = false;
+		}
 	}
 
 	public void start() {

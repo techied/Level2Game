@@ -16,6 +16,7 @@ public class ObjectManager {
 	}
 	
 	public void update() {
+
 		for (GameObject object : objects) {
 			object.update();
 		}
