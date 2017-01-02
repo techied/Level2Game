@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.ArrayList;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -17,17 +18,29 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	Timer timer;
 	ObjectManager manager;
 	Ball ball;
-	Wall wall;
+	ArrayList<Wall> walls;
 	boolean left, right;
 	
 	public GamePanel() {
 		timer = new Timer(1000/60, this);
 		manager = new ObjectManager();
-		ball = new Ball(100, 100, 0, 0);
-		wall = new Wall(300, 100, 50, 50);
+		ball = new Ball(25, 100, 0, 0);
 		manager.add(ball);
-		manager.add(wall);
-		ball.addWall(wall);
+		ball.addWall(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
+		ball.addWall(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
+		ball.addWall(new Wall(0, -Ball.height, Game.WIDTH, Ball.height));
+		ball.addWall(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
+		walls = new ArrayList<Wall>();
+		walls.add(new Wall(100, 0, 50, 700));
+		walls.add(new Wall(300, 100, 50, 700));
+		initWalls();
+	}
+	
+	private void initWalls() {
+		for (Wall wall : walls) {
+			manager.add(wall);
+			ball.addWall(wall);
+		}
 	}
 	
 	private void update() {

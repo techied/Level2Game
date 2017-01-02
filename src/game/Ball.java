@@ -6,6 +6,11 @@ import java.util.ArrayList;
 
 public class Ball extends GameObject {
 
+	public static final int height = 50;
+	public static final int width = 50;
+	
+	private static final float diffuse = 1;
+	
 	private int velX, velY, counter;
 	private boolean inMotion = false, right = false, left = false;
 	private ArrayList<Wall> walls;
@@ -15,8 +20,6 @@ public class Ball extends GameObject {
 		this.y = y;
 		this.velX = velX;
 		this.velY = velY;
-		width = 50;
-		height = 50;
 		walls = new ArrayList<Wall>();
 	}
 	
@@ -35,27 +38,20 @@ public class Ball extends GameObject {
 				counter = 0;
 			}
 		}
-		System.out.println(x + ", " + y + ", " + velY + ", " + left + ", " + right);
-		if (x + width >= Game.WIDTH) {
-			velX = -velX;
-		}
-		if (x <= 0) {
-			velX = -velX;
-		}
-		if (y + height >= Game.HEIGHT) {
-			velY = -velY;
-			//velY = (int) Math.round((float) (velY * 3 / 4));
-			if (velY == 0) {
-				inMotion = false;
-			}
-		} 
+		System.out.println(velY);
 		for (Wall wall : walls) {
-			if ((x + width >= wall.getX1()) && (x + width <= wall.getX2()) && (y >= wall.getY1()) && (y <= wall.getY2())) { 
+			if ((x + width >= wall.getX1()) && (x + width <= wall.getX2()) && ((y + height >= wall.getY1()) && (y + height <= wall.getY2()) || ((y >= wall.getY1()) && (y <= wall.getY2())))) { 
 				velX = -velX;
 			} // left side
-			if ((x >= wall.getX1()) && (x <= wall.getX2()) && (y >= wall.getY1()) && (y <= wall.getY2())) {
+			if ((x >= wall.getX1()) && (x <= wall.getX2()) && ((y + height >= wall.getY1()) && (y + height <= wall.getY2()) || ((y >= wall.getY1()) && (y <= wall.getY2())))) {
 				velX = -velX;
 			} //right side
+			if ((y + height >= wall.getY1()) && (y + height <= wall.getY2()) && ((x + width >= wall.getX1()) && (x + width <= wall.getX2()) || ((x >= wall.getX1()) && (x <= wall.getX2())))) {
+				velY = -velY;
+			} //top side
+			if ((y >= wall.getY1()) && (y <= wall.getY2()) && ((x + width >= wall.getX1()) && (x + width<= wall.getX2()) || ((x >= wall.getX1()) && (x <= wall.getX2())))) {
+				velY = -velY;
+			} //bottom side
 		}
 	}
 	
