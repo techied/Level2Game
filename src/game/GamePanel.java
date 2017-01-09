@@ -31,8 +31,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 		ball.addWall(new Wall(0, -Ball.height, Game.WIDTH, Ball.height));
 		ball.addWall(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
 		walls = new ArrayList<Wall>();
-		walls.add(new Wall(100, 0, 50, 700));
-		walls.add(new Wall(300, 100, 50, 700));
+		walls.add(new Wall(100, 0, 50, 600));
+		walls.add(new Wall(300, 200, 50, 600));
+		walls.add(new Goal(700, 0, 100, 800));
 		initWalls();
 	}
 	
@@ -72,6 +73,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			right = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = true;
+		} else {
+			ball.setInMotion(false);
 		}
 	}
 

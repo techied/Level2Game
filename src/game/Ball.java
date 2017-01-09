@@ -3,6 +3,9 @@ package game;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.TreeSet;
 
 public class Ball extends GameObject {
 
@@ -14,6 +17,10 @@ public class Ball extends GameObject {
 	private int velX, velY, counter;
 	private boolean inMotion = false, right = false, left = false;
 	private ArrayList<Wall> walls;
+	private TreeSet<Integer> wallsLeft = new TreeSet<Integer>();
+	private TreeSet<Integer> wallsRight = new TreeSet<Integer>();
+	private TreeSet<Integer> wallsUp = new TreeSet<Integer>();
+	private TreeSet<Integer> wallsDown = new TreeSet<Integer>();
 	
 	public Ball(int x, int y, int velX, int velY) {
 		this.x = x;
@@ -38,20 +45,33 @@ public class Ball extends GameObject {
 				counter = 0;
 			}
 		}
-		System.out.println(velY);
 		for (Wall wall : walls) {
 			if ((x + width >= wall.getX1()) && (x + width <= wall.getX2()) && ((y + height >= wall.getY1()) && (y + height <= wall.getY2()) || ((y >= wall.getY1()) && (y <= wall.getY2())))) { 
 				velX = -velX;
+				checkGoal(wall);
+				System.out.println("l");
 			} // left side
 			if ((x >= wall.getX1()) && (x <= wall.getX2()) && ((y + height >= wall.getY1()) && (y + height <= wall.getY2()) || ((y >= wall.getY1()) && (y <= wall.getY2())))) {
 				velX = -velX;
+				checkGoal(wall);
+				System.out.println("r");
 			} //right side
 			if ((y + height >= wall.getY1()) && (y + height <= wall.getY2()) && ((x + width >= wall.getX1()) && (x + width <= wall.getX2()) || ((x >= wall.getX1()) && (x <= wall.getX2())))) {
 				velY = -velY;
+				checkGoal(wall);
+				System.out.println("t");
 			} //top side
 			if ((y >= wall.getY1()) && (y <= wall.getY2()) && ((x + width >= wall.getX1()) && (x + width<= wall.getX2()) || ((x >= wall.getX1()) && (x <= wall.getX2())))) {
 				velY = -velY;
+				checkGoal(wall);
+				System.out.println("b");
 			} //bottom side
+		}
+	}
+	
+	private void checkGoal(Wall w) {
+		if (w instanceof Goal) {
+			System.out.println("You won!");
 		}
 	}
 	
@@ -69,8 +89,33 @@ public class Ball extends GameObject {
 	}
 	
 	private void move() {
-		x += velX;
-		y += velY;
+		for(Wall wall : walls) {
+			if (wall.getX1() - x - width > 0 && wall.getY1() < y && wall.getY2() > y + height && wall.getX1() > 0 && wall.getX2() < Game.WIDTH) 
+				wallsLeft.add(wall.getX1() - x - width);
+			if (x - wall.getX2() > 0 && wall.getY1() < y && wall.getY2() > y + height && wall.getX2() < Game.WIDTH && wall.getX1() > 0)
+				wallsRight.add(x - wall.getX2());
+			if (wall.getY1() - y - height > 0 && wall.getX1() < x && wall.getX2() > x + width && wall.getY1() > 0 && wall.getY2() < Game.HEIGHT)
+				wallsUp.add(wall.getY1() - y - height);
+			if (y - wall.getY2() > 0 && wall.getX1() < x && wall.getX2() > x + width && wall.getY2() < Game.HEIGHT && wall.getY1() > 0)
+				wallsDown.add(y - wall.getY2());
+		}
+		try {
+			System.out.println(wallsRight.first() + "dr");
+			System.out.println(wallsLeft.first() + "dl");
+			System.out.println(wallsUp.first() + "du");
+			System.out.println(wallsDown.first() + "dd");
+			if (!(wallsRight.first() + velX < 0 || wallsLeft.first() + velX < 0))
+				x += velX;
+			if (!(wallsUp.first() + velY < 0 || wallsDown.first() + velY < 0))
+				y += velY;
+		} catch(Exception IDC) {
+			x += velX;
+			y += velY;
+		}
+		wallsLeft.clear();
+		wallsRight.clear();
+		wallsUp.clear();
+		wallsDown.clear();
 	}
 	
 	public void moveX(boolean right, boolean left) {
