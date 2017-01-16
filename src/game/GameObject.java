@@ -4,7 +4,7 @@ import java.awt.Graphics;
 
 public class GameObject {
 
-	protected int x, y, width, height;
+	protected float x, y, width, height;
 	protected boolean isAlive;
 	
 	
@@ -23,7 +23,6 @@ public class GameObject {
 	}
 	
 	public void draw(Graphics g) {
-		g.fillRect(x, y, width, height);
 	}
 	
 	public void reverseDirection() {

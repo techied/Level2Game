@@ -26,14 +26,15 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 		manager = new ObjectManager();
 		ball = new Ball(25, 100, 0, 0);
 		manager.add(ball);
-		ball.addWall(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
-		ball.addWall(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
-		ball.addWall(new Wall(0, -Ball.height, Game.WIDTH, Ball.height));
-		ball.addWall(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
 		walls = new ArrayList<Wall>();
-		walls.add(new Wall(100, 0, 50, 600));
-		walls.add(new Wall(300, 200, 50, 600));
-		walls.add(new Goal(700, 0, 100, 800));
+
+		walls.add(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
+		walls.add(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
+		walls.add(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
+		walls.add(new Wall(0, -Ball.height, Game.WIDTH, Ball.height));
+		//walls.add(new Wall(100, 0, 50, 600));
+		//walls.add(new Wall(300, 200, 50, 600));
+		//walls.add(new Goal(700, 0, 100, 800));
 		initWalls();
 	}
 	
@@ -45,19 +46,27 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	}
 	
 	private void update() {
-		manager.update();
 		ball.moveX(right, left);
+		manager.update();
 	}
 	
-	public void paintComponent(Graphics g) {
-		g.drawRect(0, 0, Game.WIDTH, Game.HEIGHT);
+	public void paintComponent(Graphics g) {	
+		g.drawRect(0, 0, 800, 1);
+		g.drawRect(0, 100, 800, 1);
+		g.drawRect(0, 200, 800, 1);
+		g.drawRect(0, 300, 800, 1);
+		g.drawRect(0, 400, 800, 1);		
+		g.drawRect(0, 500, 800, 1);
+		g.drawRect(0, 600, 800, 1);
+		g.drawRect(0, 700, 800, 1);
+		g.drawRect(0, 800, 800, 1);
 		manager.draw(g);
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		repaint();
 		update();
+		repaint();
 	}
 
 	@Override
@@ -68,13 +77,18 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	@Override
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+			timer.start();
 			ball.setInMotion(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			right = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = true;
-		} else {
-			ball.setInMotion(false);
+		} else if (e.getKeyCode() == KeyEvent.VK_S) {
+			repaint();
+			update();
+		}
+		else {
+			timer.stop();
 		}
 	}
 

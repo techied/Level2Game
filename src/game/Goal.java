@@ -15,7 +15,7 @@ public class Goal extends Wall{
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.RED);
-		g.fillRect(x, y, width, height);
+		g.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 	}
 	
 }

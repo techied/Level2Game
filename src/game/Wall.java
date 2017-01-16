@@ -20,22 +20,22 @@ public class Wall extends GameObject {
 	
 	public void draw(Graphics g) {
 		g.setColor(Color.BLACK);
-		g.fillRect(x, y, width, height);
+		g.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 	}
 	
-	public int getX1() {
+	public float getX1() {
 		return x;
 	}
 	
-	public int getX2() {
+	public float getX2() {
 		return x + width;
 	}
 	
-	public int getY1() {
+	public float getY1() {
 		return y;
 	}
 	
-	public int getY2() {
+	public float getY2() {
 		return y + height;
 	}
 
