@@ -32,9 +32,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 		walls.add(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
 		walls.add(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
 		walls.add(new Wall(0, -Ball.height, Game.WIDTH, Ball.height));
-		//walls.add(new Wall(100, 0, 50, 600));
-		//walls.add(new Wall(300, 200, 50, 600));
-		//walls.add(new Goal(700, 0, 100, 800));
+		walls.add(new Wall(100, 0, 50, 600));
+		walls.add(new Wall(300, 200, 50, 600));
+		walls.add(new Goal(700, 0, 100, 800));
 		initWalls();
 	}
 	
@@ -51,15 +51,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	}
 	
 	public void paintComponent(Graphics g) {	
-		g.drawRect(0, 0, 800, 1);
-		g.drawRect(0, 100, 800, 1);
-		g.drawRect(0, 200, 800, 1);
-		g.drawRect(0, 300, 800, 1);
-		g.drawRect(0, 400, 800, 1);		
-		g.drawRect(0, 500, 800, 1);
-		g.drawRect(0, 600, 800, 1);
-		g.drawRect(0, 700, 800, 1);
-		g.drawRect(0, 800, 800, 1);
+		super.paintComponent(g);
 		manager.draw(g);
 	}
 	

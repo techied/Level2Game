@@ -6,7 +6,7 @@ public class Game {
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 800;
-	public static final int GRAVITY = -1;
+	public static final float GRAVITY = -0.1f;
 	
 	private JFrame window;
 	private GamePanel gamePanel;
@@ -20,7 +20,7 @@ public class Game {
 	
 	private void setup() {
 		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		window.setSize(WIDTH + 1, HEIGHT + 23);
+		window.setSize(WIDTH, HEIGHT + 23);
 		window.setVisible(true);
 		window.addKeyListener(gamePanel);
 		window.addMouseListener(gamePanel);
