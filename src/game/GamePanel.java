@@ -79,7 +79,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			repaint();
 			update();
 		}
-		else {
+		else if (e.getKeyCode() == KeyEvent.VK_P){
 			timer.stop();
 		}
 	}
