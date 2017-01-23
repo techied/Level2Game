@@ -34,4 +34,8 @@ public class ObjectManager {
 		}
 	}
 	
+	public void clear() {
+		objects.clear();
+	}
+	
 }

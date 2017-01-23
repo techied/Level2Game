@@ -11,7 +11,7 @@ public class Ball extends GameObject {
 	public static final int width = 50;
 
 	private float velX, velY;
-	private boolean inMotion = false, right = false, left = false;
+	private boolean inMotion = false, won = false, right = false, left = false, rightGoal = false, leftGoal = false, upGoal = false, downGoal = false;
 	private ArrayList<Wall> walls;
 	private TreeSet<Float> wallsLeft = new TreeSet<Float>();
 	private TreeSet<Float> wallsRight = new TreeSet<Float>();
@@ -27,9 +27,7 @@ public class Ball extends GameObject {
 	}
 
 	public void update() {
-		// counter++;
 		if (inMotion) {
-			// if (counter > 2) {
 			velY -= Game.GRAVITY;
 			if (right) {
 				velX += 0.1f;
@@ -37,25 +35,44 @@ public class Ball extends GameObject {
 			if (left) {
 				velX -= 0.1f;
 			}
-			// counter = 0;
-			// }
 			for (Wall wall : walls) {
-				if ((wall.getX1() - x - width > 0) && ((wall.getY1() > y && wall.getY1() < y + height)
+				boolean isGoal = wall instanceof Goal;
+				if (((wall.getY1() > y && wall.getY1() < y + height)
 						|| (wall.getY2() > y && wall.getY2() < y + height)
-						|| (y > wall.getY1() && y + height < wall.getY2())))
-					wallsLeft.add(wall.getX1() - x - width);
-				if ((x - wall.getX2() > 0) && ((wall.getY1() > y && wall.getY1() < y + height)
+						|| (y > wall.getY1() && y + height < wall.getY2()))) {
+					float leftD = Math.abs(wall.getX1() - x - width);
+					if (isGoal && leftD < wallsLeft.first()) {
+						leftGoal = true;
+					}
+					wallsLeft.add(leftD);
+				}
+				if (((wall.getY1() > y && wall.getY1() < y + height)
 						|| (wall.getY2() > y && wall.getY2() < y + height)
-						|| (y > wall.getY1() && y + height < wall.getY2())))
-					wallsRight.add(x - wall.getX2());
-				if ((wall.getY1() - y - height > 0) && ((wall.getX1() > x && wall.getX1() < x + width)
+						|| (y > wall.getY1() && y + height < wall.getY2()))) {
+					float rightD = Math.abs(x - wall.getX2());
+					if (isGoal && rightD < wallsRight.first()) {
+						rightGoal = true;
+					}
+					wallsRight.add(rightD);
+				}
+				if (((wall.getX1() > x && wall.getX1() < x + width)
 						|| (wall.getX2() > x && wall.getX2() < x + width)
-						|| (x > wall.getX1() && x + width < wall.getX2())))
-					wallsUp.add(wall.getY1() - y - height);
-				if ((y - wall.getY2() > 0) && ((wall.getX1() > x && wall.getX1() < x + width)
+						|| (x > wall.getX1() && x + width < wall.getX2()))) {
+					float upD = Math.abs(wall.getY1() - y - height);
+					if (isGoal && upD < wallsUp.first()) {
+						upGoal = true;
+					}
+					wallsUp.add(upD);
+				}
+				if (((wall.getX1() > x && wall.getX1() < x + width)
 						|| (wall.getX2() > x && wall.getX2() < x + width)
-						|| (x > wall.getX1() && x + width < wall.getX2())))
-					wallsDown.add(y - wall.getY2());
+						|| (x > wall.getX1() && x + width < wall.getX2()))) {
+					float downD = Math.abs(y - wall.getY2());
+					if (isGoal && downD < wallsDown.first()) {
+						downGoal = true;
+					}
+					wallsDown.add(downD);
+				}
 			}
 			if (wallsLeft.isEmpty())
 				wallsLeft.add(Float.MAX_VALUE);
@@ -66,27 +83,7 @@ public class Ball extends GameObject {
 			if (wallsDown.isEmpty())
 				wallsDown.add(Float.MAX_VALUE);
 			move();
-		} /*
-			 * for (Wall wall : walls) { if ((x + width >= wall.getX1()) && (x +
-			 * width <= wall.getX2()) && ((y + height >= wall.getY1()) && (y +
-			 * height <= wall.getY2()) || ((y >= wall.getY1()) && (y <=
-			 * wall.getY2())))) { velX = -velX; checkGoal(wall);
-			 * System.out.println("l"); } // left side if ((x >= wall.getX1())
-			 * && (x <= wall.getX2()) && ((y + height >= wall.getY1()) && (y +
-			 * height <= wall.getY2()) || ((y >= wall.getY1()) && (y <=
-			 * wall.getY2())))) { velX = -velX; checkGoal(wall);
-			 * System.out.println("r"); } //right side if ((y + height >=
-			 * wall.getY1()) && (y + height <= wall.getY2()) && ((x + width >=
-			 * wall.getX1()) && (x + width <= wall.getX2()) || ((x >=
-			 * wall.getX1()) && (x <= wall.getX2())))) { velY = -velY;
-			 * checkGoal(wall); System.out.println("t"); } //top side if ((y >=
-			 * wall.getY1()) && (y <= wall.getY2()) && ((x + width >=
-			 * wall.getX1()) && (x + width<= wall.getX2()) || ((x >=
-			 * wall.getX1()) && (x <= wall.getX2())))) { velY = -velY;
-			 * checkGoal(wall); System.out.println("b"); } //bottom side
-			 * 
-			 * }
-			 */
+		} 
 	}
 
 	public void addWall(Wall w) {
@@ -109,6 +106,10 @@ public class Ball extends GameObject {
 			wallsRight.clear();
 			wallsUp.clear();
 			wallsDown.clear();
+			leftGoal = false;
+			rightGoal = false;
+			upGoal = false;
+			downGoal = false;
 		}
 	}
 
@@ -117,28 +118,69 @@ public class Ball extends GameObject {
 	}
 
 	private void move() {
-		if (!(wallsRight.first() + velX < 1f || wallsLeft.first() - velX < 1f)) {
-			x += velX;
-		} else {
-			if (velX > 0)
-				x += wallsLeft.first();
-			else
-				x -= wallsRight.first();
+		boolean xCollision = false;
+		boolean yCollision = false;
+		if (wallsRight.first() + velX < 0f) {
+			x -= wallsRight.first();
 			velX = -velX;
+			xCollision = true;
+			if (rightGoal) {
+				won = true;
+				reset();
+				return;
+			}
 		}
-		if (!(wallsUp.first() - velY < 1f || wallsDown.first() + velY < 1f)) {
-			y += velY;
-		} else {
-			if (velY > 0)
-				y += wallsUp.first();
-			else
-				y -= wallsDown.first();
+		if (wallsLeft.first() - velX < 0f) {
+			x += wallsLeft.first();
+			velX = -velX;
+			xCollision = true;
+			if (leftGoal) {
+				won = true;
+				reset();
+				return;
+			}
+		}
+		if (wallsUp.first() - velY < 0f) {
+			y += wallsUp.first();
 			velY = -velY;
-
+			yCollision = true;
+			if (upGoal) {
+				won = true;
+				reset();
+				return;
+			}
 		}
-
+		if (wallsDown.first() + velY < 0f) {
+			y -= wallsDown.first();
+			velY = -velY;
+			yCollision = true;
+			if (downGoal) {
+				won = true;
+				reset();
+				return;
+			}
+		}
+		if (!xCollision)
+			x += velX;
+		if (!yCollision)
+			y += velY;
 	}
 
+	private void reset() { 
+		inMotion = false;
+		walls.clear();
+		velX = 0;
+		velY = 0;
+	}
+	
+	public boolean hasWon() {
+		if (won) {
+			won = false;
+			return true;
+		}
+		return false;
+	}
+	
 	public void moveX(boolean right, boolean left) {
 		this.right = right;
 		this.left = left;

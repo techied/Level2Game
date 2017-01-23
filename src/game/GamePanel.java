@@ -19,7 +19,8 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	ObjectManager manager;
 	Ball ball;
 	ArrayList<Wall> walls;
-	boolean left, right;
+	boolean left, right, up, down;
+	Level level2;
 	
 	public GamePanel() {
 		timer = new Timer(1000/60, this);
@@ -27,7 +28,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 		ball = new Ball(25, 100, 0, 0);
 		manager.add(ball);
 		walls = new ArrayList<Wall>();
-
 		walls.add(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
 		walls.add(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
 		walls.add(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
@@ -36,6 +36,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 		walls.add(new Wall(300, 200, 50, 600));
 		walls.add(new Goal(700, 0, 100, 800));
 		initWalls();
+		level2 = new Level();
 	}
 	
 	private void initWalls() {
@@ -55,10 +56,23 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 		manager.draw(g);
 	}
 	
+	private void makeNextLevel() {
+		manager.add(ball);
+		ball.setX(level2.getStartX());
+		ball.setY(level2.getStartY());
+		walls = level2.getWalls();	
+		initWalls();
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		update();
 		repaint();
+		if (ball.hasWon()) {
+			walls.clear();
+			manager.clear();
+			makeNextLevel();
+		}
 	}
 
 	@Override
@@ -75,7 +89,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			right = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_S) {
+		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			up = true;
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			down = true;
+		}else if (e.getKeyCode() == KeyEvent.VK_S) {
 			repaint();
 			update();
 		}
@@ -90,6 +108,10 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			right = false;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = false;
+		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
+			up = false;
+		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+			down = false;
 		}
 	}
 
