@@ -15,28 +15,30 @@ import javax.swing.Timer;
 @SuppressWarnings("serial")
 public class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
 	
-	Timer timer;
-	ObjectManager manager;
-	Ball ball;
-	ArrayList<Wall> walls;
-	boolean left, right, up, down;
-	Level level2;
+	private Timer timer;
+	private ObjectManager manager;
+	private Ball ball;
+	private ArrayList<Wall> walls;
+	private ArrayList<Level> levels;
+	private Level level1, level2, level3, level4;
+	private boolean left, right;
+	private int level = 0;
 	
 	public GamePanel() {
 		timer = new Timer(1000/60, this);
 		manager = new ObjectManager();
-		ball = new Ball(25, 100, 0, 0);
-		manager.add(ball);
+		ball = new Ball(0, 0);
 		walls = new ArrayList<Wall>();
-		walls.add(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
-		walls.add(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
-		walls.add(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
-		walls.add(new Wall(0, -Ball.height, Game.WIDTH, Ball.height));
-		walls.add(new Wall(100, 0, 50, 600));
-		walls.add(new Wall(300, 200, 50, 600));
-		walls.add(new Goal(700, 0, 100, 800));
-		initWalls();
-		level2 = new Level();
+		levels = new ArrayList<Level>();
+		level1 = new Level("levels/level1.txt");
+		level2 = new Level("levels/level2.txt");
+		level3 = new Level("levels/level3.txt");
+		level4 = new Level("levels/level4.txt");
+		levels.add(level1);
+		levels.add(level2);
+		levels.add(level3);
+		levels.add(level4);
+		makeNextLevel();
 	}
 	
 	private void initWalls() {
@@ -57,11 +59,17 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	}
 	
 	private void makeNextLevel() {
-		manager.add(ball);
-		ball.setX(level2.getStartX());
-		ball.setY(level2.getStartY());
-		walls = level2.getWalls();	
-		initWalls();
+		try {
+			manager.add(ball);
+			ball.setX(levels.get(level).getStartX());
+			ball.setY(levels.get(level).getStartY());
+			walls = levels.get(level).getWalls();	
+			initWalls();
+			level++;
+		}
+		catch (Exception e) {
+			System.out.println("You beat the game!");
+		}
 	}
 	
 	@Override
@@ -89,11 +97,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			right = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			up = true;
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			down = true;
-		}else if (e.getKeyCode() == KeyEvent.VK_S) {
+		} else if (e.getKeyCode() == KeyEvent.VK_S) {
 			repaint();
 			update();
 		}
@@ -108,11 +112,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			right = false;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_UP) {
-			up = false;
-		} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-			down = false;
-		}
+		} 
 	}
 
 	public void start() {

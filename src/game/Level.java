@@ -1,29 +1,93 @@
 package game;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
+
 
 public class Level {
 
 	private ArrayList<Wall> walls;
-	private Goal goal;
 	private float startX, startY;
 	
-	public Level() {
+	public Level(String fp) {
+		
+		BufferedReader br = null;
+		FileReader fr = null;
+		
 		walls = new ArrayList<Wall>();
 		walls.add(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
 		walls.add(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
 		walls.add(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
 		walls.add(new Wall(0, -Ball.height, Game.WIDTH, Ball.height));
-		walls.add(new Wall(0, 100, 700, Ball.height));
-		walls.add(new Wall(100, 300, 700, Ball.height));
-		walls.add(new Goal(0, 750, Game.WIDTH, Ball.height));
-		goal = new Goal(0,0,0,0);
-		startX = 50;
-		startY = 1;
+		
+		try {
+			
+			fr = new FileReader(fp);
+			br = new BufferedReader(fr);
+			
+			String currentLine;
+			
+			while ((currentLine = br.readLine()) != null) {
+				boolean goal = false;
+				boolean x = false;
+				boolean y = false;
+				String currentNumber = "";
+				ArrayList<Integer> input = new ArrayList<Integer>();
+				for (int i = 0; i < currentLine.length(); i++) {
+					char currentChar = currentLine.charAt(i);
+					if (currentChar == ' ') {
+						input.add(Integer.parseInt(currentNumber));
+						currentNumber = "";
+					} else if (currentChar == 'g') {
+						goal = true;
+					} else if (currentChar == 'x') {
+						x = true;
+					} else if (currentChar == 'y') {
+						y = true;
+					} else if (currentChar == 'w') {
+						
+					}
+					else {
+						currentNumber += currentChar;
+					}
+				}
+				if (goal) {
+					walls.add(new Goal(input.get(0), input.get(1), input.get(2), input.get(3)));
+				} else if (x) {
+					startX = input.get(0);
+				} else if (y) {
+					startY = input.get(0);
+				}
+				else {
+					walls.add(new Wall(input.get(0), input.get(1), input.get(2), input.get(3)));
+				}
+				
+			}
+			
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+
+				if (br != null)
+					br.close();
+
+				if (fr != null)
+					fr.close();
+
+			} catch (IOException ex) {
+
+				ex.printStackTrace();
+
+			}
+		}
 	}
 	
 	public ArrayList<Wall> getWalls() {
-		walls.add(goal); //so goal is always last
 		return walls;
 	}
 	

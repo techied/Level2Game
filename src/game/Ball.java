@@ -18,11 +18,11 @@ public class Ball extends GameObject {
 	private TreeSet<Float> wallsUp = new TreeSet<Float>();
 	private TreeSet<Float> wallsDown = new TreeSet<Float>();
 
-	public Ball(float x, float y, int velX, int velY) {
+	public Ball(float x, float y) {
 		this.x = x;
 		this.y = y;
-		this.velX = velX;
-		this.velY = velY;
+		this.velX = 0;
+		this.velY = 0;
 		walls = new ArrayList<Wall>();
 	}
 
@@ -94,14 +94,18 @@ public class Ball extends GameObject {
 		g.setColor(Color.BLACK);
 		g.fillOval(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
 		if (inMotion) {
-			System.out.println("x: " + x);
-			System.out.println("y: " + y);
-			System.out.println("velX: " + velX);
-			System.out.println("velY: " + velY);
-			System.out.println(wallsRight.first() + " Walls Right");
-			System.out.println(wallsLeft.first() + " Walls Left");
-			System.out.println(wallsUp.first() + " Walls Up");
-			System.out.println(wallsDown.first() + " Walls Down");
+			try {
+				System.out.println("x: " + x);
+				System.out.println("y: " + y);
+				System.out.println("velX: " + velX);
+				System.out.println("velY: " + velY);
+				System.out.println(wallsRight.first() + " Walls Right");
+				System.out.println(wallsLeft.first() + " Walls Left");
+				System.out.println(wallsUp.first() + " Walls Up");
+				System.out.println(wallsDown.first() + " Walls Down");
+			} catch (Exception e) {
+				
+			}
 			wallsLeft.clear();
 			wallsRight.clear();
 			wallsUp.clear();
