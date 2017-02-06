@@ -8,37 +8,39 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 @SuppressWarnings("serial")
-public class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener{
+public class GamePanel extends JPanel implements KeyListener, ActionListener, MouseListener {
 	
 	private Timer timer;
 	private ObjectManager manager;
 	private Ball ball;
 	private ArrayList<Wall> walls;
 	private ArrayList<Level> levels;
-	private Level level1, level2, level3, level4;
 	private boolean left, right;
 	private int level = 0;
+	private int numberOfLevels = 4;
 	
 	public GamePanel() {
 		timer = new Timer(1000/60, this);
 		manager = new ObjectManager();
 		ball = new Ball(0, 0);
 		walls = new ArrayList<Wall>();
-		levels = new ArrayList<Level>();
-		level1 = new Level("levels/level1.txt");
-		level2 = new Level("levels/level2.txt");
-		level3 = new Level("levels/level3.txt");
-		level4 = new Level("levels/level4.txt");
-		levels.add(level1);
-		levels.add(level2);
-		levels.add(level3);
-		levels.add(level4);
+		makeLevels();
 		makeNextLevel();
+	}
+	
+	private void makeLevels() {
+		levels = new ArrayList<Level>();
+		for (int i = 1; i <= numberOfLevels; i++) {
+			Level level = new Level("levels/level" + Integer.toString(i) + ".txt");
+			levels.add(level);
+		}
+		Collections.sort(levels);
 	}
 	
 	private void initWalls() {
@@ -61,9 +63,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	private void makeNextLevel() {
 		try {
 			manager.add(ball);
-			ball.setX(levels.get(level).getStartX());
-			ball.setY(levels.get(level).getStartY());
-			walls = levels.get(level).getWalls();	
+			ball.setStartX(levels.get(level).getStartX());
+			ball.setStartY(levels.get(level).getStartY());
+			walls = levels.get(level).getWalls();
 			initWalls();
 			level++;
 		}

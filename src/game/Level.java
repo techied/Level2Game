@@ -6,10 +6,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class Level {
+public class Level implements Comparable<Level>{
 
 	private ArrayList<Wall> walls;
 	private float startX, startY;
+	private float order;
 	
 	public Level(String fp) {
 		
@@ -33,12 +34,15 @@ public class Level {
 				boolean goal = false;
 				boolean x = false;
 				boolean y = false;
+				boolean movingWall = false;
+				boolean _order = false;
+				boolean deathWall = false;
 				String currentNumber = "";
-				ArrayList<Integer> input = new ArrayList<Integer>();
+				ArrayList<Float> input = new ArrayList<Float>();
 				for (int i = 0; i < currentLine.length(); i++) {
 					char currentChar = currentLine.charAt(i);
 					if (currentChar == ' ') {
-						input.add(Integer.parseInt(currentNumber));
+						input.add(Float.parseFloat(currentNumber));
 						currentNumber = "";
 					} else if (currentChar == 'g') {
 						goal = true;
@@ -46,10 +50,15 @@ public class Level {
 						x = true;
 					} else if (currentChar == 'y') {
 						y = true;
+					} else if (currentChar == 'm') {
+						movingWall = true;
+					} else if (currentChar == 'o') {
+						_order = true;
+					} else if (currentChar == 'd') {
+						deathWall = true;
 					} else if (currentChar == 'w') {
 						
-					}
-					else {
+					} else {
 						currentNumber += currentChar;
 					}
 				}
@@ -59,8 +68,13 @@ public class Level {
 					startX = input.get(0);
 				} else if (y) {
 					startY = input.get(0);
-				}
-				else {
+				} else if (_order) {
+					order = input.get(0);
+				} else if (movingWall) {
+					walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
+				} else if (deathWall){
+					walls.add(new DeathWall(input.get(0), input.get(1), input.get(2), input.get(3)));
+				} else {
 					walls.add(new Wall(input.get(0), input.get(1), input.get(2), input.get(3)));
 				}
 				
@@ -97,6 +111,16 @@ public class Level {
 	
 	public  float getStartY() {
 		return startY;
+	}
+	
+	public float getOrder() {
+		return order;
+	}
+
+	@Override
+	public int compareTo(Level o) {
+		float compareOrder = ((Level) o).getOrder();
+		return Math.round(this.order - compareOrder);
 	}
 	
 }

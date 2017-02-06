@@ -10,14 +10,16 @@ public class Ball extends GameObject {
 	public static final int height = 50;
 	public static final int width = 50;
 
-	private float velX, velY;
-	private boolean inMotion = false, won = false, right = false, left = false, rightGoal = false, leftGoal = false, upGoal = false, downGoal = false;
+	private float velX, velY, startX, startY;
+	private boolean inMotion = false, won = false, right = false, left = false, rightGoal = false, leftGoal = false, upGoal = false, downGoal = false, rightDeath = false, leftDeath = false, upDeath = false, downDeath = false;
 	private ArrayList<Wall> walls;
 	private TreeSet<Float> wallsLeft = new TreeSet<Float>();
 	private TreeSet<Float> wallsRight = new TreeSet<Float>();
 	private TreeSet<Float> wallsUp = new TreeSet<Float>();
 	private TreeSet<Float> wallsDown = new TreeSet<Float>();
-
+	private float xDefraction = 1.0f;
+	private float yDefraction = 1.0f;
+	
 	public Ball(float x, float y) {
 		this.x = x;
 		this.y = y;
@@ -37,12 +39,18 @@ public class Ball extends GameObject {
 			}
 			for (Wall wall : walls) {
 				boolean isGoal = wall instanceof Goal;
+				boolean isDeathWall = wall instanceof DeathWall;
 				if (((wall.getY1() > y && wall.getY1() < y + height)
 						|| (wall.getY2() > y && wall.getY2() < y + height)
 						|| (y > wall.getY1() && y + height < wall.getY2()))) {
 					float leftD = Math.abs(wall.getX1() - x - width);
 					if (isGoal && leftD < wallsLeft.first()) {
 						leftGoal = true;
+						leftDeath = false;
+					}
+					if (isDeathWall && leftD < wallsLeft.first()) {
+						leftDeath = true;
+						leftGoal = false;
 					}
 					wallsLeft.add(leftD);
 				}
@@ -52,6 +60,11 @@ public class Ball extends GameObject {
 					float rightD = Math.abs(x - wall.getX2());
 					if (isGoal && rightD < wallsRight.first()) {
 						rightGoal = true;
+						rightDeath = false;
+					}
+					if (isDeathWall && rightD < wallsRight.first()) {
+						rightDeath = true;
+						rightGoal = false;
 					}
 					wallsRight.add(rightD);
 				}
@@ -61,6 +74,11 @@ public class Ball extends GameObject {
 					float upD = Math.abs(wall.getY1() - y - height);
 					if (isGoal && upD < wallsUp.first()) {
 						upGoal = true;
+						upDeath = false;
+					}
+					if (isDeathWall && upD < wallsUp.first()) {
+						upDeath = true;
+						upGoal = false;
 					}
 					wallsUp.add(upD);
 				}
@@ -70,6 +88,11 @@ public class Ball extends GameObject {
 					float downD = Math.abs(y - wall.getY2());
 					if (isGoal && downD < wallsDown.first()) {
 						downGoal = true;
+						downDeath = false;
+					}
+					if (isDeathWall && downD < wallsDown.first()) {
+						downDeath = true;
+						downGoal = false;
 					}
 					wallsDown.add(downD);
 				}
@@ -127,41 +150,73 @@ public class Ball extends GameObject {
 		if (wallsRight.first() + velX < 0f) {
 			x -= wallsRight.first();
 			velX = -velX;
+			velX *= xDefraction;
 			xCollision = true;
 			if (rightGoal) {
 				won = true;
 				reset();
 				return;
 			}
+			if (rightDeath) {
+				x = startX;
+				y = startY;
+				velX = 0;
+				velY = 0;
+				inMotion = false;
+			}
 		}
 		if (wallsLeft.first() - velX < 0f) {
 			x += wallsLeft.first();
 			velX = -velX;
+			velX *= xDefraction;
 			xCollision = true;
 			if (leftGoal) {
 				won = true;
 				reset();
 				return;
 			}
+			if (leftDeath) {
+				x = startX;
+				y = startY;
+				velX = 0;
+				velY = 0;
+				inMotion = false;
+			}
 		}
 		if (wallsUp.first() - velY < 0f) {
 			y += wallsUp.first();
 			velY = -velY;
+			velY *= yDefraction;
 			yCollision = true;
 			if (upGoal) {
 				won = true;
 				reset();
 				return;
 			}
+			if (upDeath) {
+				x = startX;
+				y = startY;
+				velX = 0;
+				velY = 0;
+				inMotion = false;
+			}
 		}
 		if (wallsDown.first() + velY < 0f) {
 			y -= wallsDown.first();
 			velY = -velY;
+			velY *= yDefraction;
 			yCollision = true;
 			if (downGoal) {
 				won = true;
 				reset();
 				return;
+			}
+			if (downDeath) {
+				x = startX;
+				y = startY;
+				velX = 0;
+				velY = 0;
+				inMotion = false;
 			}
 		}
 		if (!xCollision)
@@ -188,6 +243,16 @@ public class Ball extends GameObject {
 	public void moveX(boolean right, boolean left) {
 		this.right = right;
 		this.left = left;
+	}
+	
+	public void setStartX(float x) {
+		startX = x;
+		this.x = x;
+	}
+	
+	public void setStartY(float y) {
+		startY = y;
+		this.y = y;
 	}
 
 }
