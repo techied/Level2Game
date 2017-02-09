@@ -36,7 +36,7 @@ public class Level implements Comparable<Level>{
 				boolean y = false;
 				boolean movingWall = false;
 				boolean _order = false;
-				boolean deathWall = false;
+				boolean spike = false;
 				String currentNumber = "";
 				ArrayList<Float> input = new ArrayList<Float>();
 				for (int i = 0; i < currentLine.length(); i++) {
@@ -54,8 +54,8 @@ public class Level implements Comparable<Level>{
 						movingWall = true;
 					} else if (currentChar == 'o') {
 						_order = true;
-					} else if (currentChar == 'd') {
-						deathWall = true;
+					} else if (currentChar == 's') {
+						spike = true;
 					} else if (currentChar == 'w') {
 						
 					} else {
@@ -72,8 +72,8 @@ public class Level implements Comparable<Level>{
 					order = input.get(0);
 				} else if (movingWall) {
 					walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
-				} else if (deathWall){
-					walls.add(new DeathWall(input.get(0), input.get(1), input.get(2), input.get(3)));
+				} else if (spike){
+					walls.addAll(Spike.makeSpikes(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
 				} else {
 					walls.add(new Wall(input.get(0), input.get(1), input.get(2), input.get(3)));
 				}

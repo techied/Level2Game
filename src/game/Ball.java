@@ -11,7 +11,7 @@ public class Ball extends GameObject {
 	public static final int width = 50;
 
 	private float velX, velY, startX, startY;
-	private boolean inMotion = false, won = false, right = false, left = false, rightGoal = false, leftGoal = false, upGoal = false, downGoal = false, rightDeath = false, leftDeath = false, upDeath = false, downDeath = false;
+	private boolean inMotion = false, won = false, right = false, left = false, rightGoal = false, leftGoal = false, upGoal = false, downGoal = false, rightSpike = false, leftSpike = false, upSpike = false, downSpike = false;
 	private ArrayList<Wall> walls;
 	private TreeSet<Float> wallsLeft = new TreeSet<Float>();
 	private TreeSet<Float> wallsRight = new TreeSet<Float>();
@@ -39,17 +39,17 @@ public class Ball extends GameObject {
 			}
 			for (Wall wall : walls) {
 				boolean isGoal = wall instanceof Goal;
-				boolean isDeathWall = wall instanceof DeathWall;
+				boolean isSpike = wall instanceof Spike;
 				if (((wall.getY1() > y && wall.getY1() < y + height)
 						|| (wall.getY2() > y && wall.getY2() < y + height)
 						|| (y > wall.getY1() && y + height < wall.getY2()))) {
 					float leftD = Math.abs(wall.getX1() - x - width);
 					if (isGoal && leftD < wallsLeft.first()) {
 						leftGoal = true;
-						leftDeath = false;
+						leftSpike = false;
 					}
-					if (isDeathWall && leftD < wallsLeft.first()) {
-						leftDeath = true;
+					if (isSpike && leftD < wallsLeft.first()) {
+						leftSpike = true;
 						leftGoal = false;
 					}
 					wallsLeft.add(leftD);
@@ -60,10 +60,10 @@ public class Ball extends GameObject {
 					float rightD = Math.abs(x - wall.getX2());
 					if (isGoal && rightD < wallsRight.first()) {
 						rightGoal = true;
-						rightDeath = false;
+						rightSpike = false;
 					}
-					if (isDeathWall && rightD < wallsRight.first()) {
-						rightDeath = true;
+					if (isSpike && rightD < wallsRight.first()) {
+						rightSpike = true;
 						rightGoal = false;
 					}
 					wallsRight.add(rightD);
@@ -74,10 +74,10 @@ public class Ball extends GameObject {
 					float upD = Math.abs(wall.getY1() - y - height);
 					if (isGoal && upD < wallsUp.first()) {
 						upGoal = true;
-						upDeath = false;
+						upSpike = false;
 					}
-					if (isDeathWall && upD < wallsUp.first()) {
-						upDeath = true;
+					if (isSpike && upD < wallsUp.first()) {
+						upSpike = true;
 						upGoal = false;
 					}
 					wallsUp.add(upD);
@@ -88,10 +88,10 @@ public class Ball extends GameObject {
 					float downD = Math.abs(y - wall.getY2());
 					if (isGoal && downD < wallsDown.first()) {
 						downGoal = true;
-						downDeath = false;
+						downSpike = false;
 					}
-					if (isDeathWall && downD < wallsDown.first()) {
-						downDeath = true;
+					if (isSpike && downD < wallsDown.first()) {
+						downSpike = true;
 						downGoal = false;
 					}
 					wallsDown.add(downD);
@@ -137,6 +137,10 @@ public class Ball extends GameObject {
 			rightGoal = false;
 			upGoal = false;
 			downGoal = false;
+			leftSpike = false;
+			rightSpike = false;
+			upSpike = false;
+			downSpike = false;
 		}
 	}
 
@@ -157,7 +161,7 @@ public class Ball extends GameObject {
 				reset();
 				return;
 			}
-			if (rightDeath) {
+			if (rightSpike) {
 				x = startX;
 				y = startY;
 				velX = 0;
@@ -175,7 +179,7 @@ public class Ball extends GameObject {
 				reset();
 				return;
 			}
-			if (leftDeath) {
+			if (leftSpike) {
 				x = startX;
 				y = startY;
 				velX = 0;
@@ -193,7 +197,7 @@ public class Ball extends GameObject {
 				reset();
 				return;
 			}
-			if (upDeath) {
+			if (upSpike) {
 				x = startX;
 				y = startY;
 				velX = 0;
@@ -211,7 +215,7 @@ public class Ball extends GameObject {
 				reset();
 				return;
 			}
-			if (downDeath) {
+			if (downSpike) {
 				x = startX;
 				y = startY;
 				velX = 0;
