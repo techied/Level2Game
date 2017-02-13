@@ -2,33 +2,37 @@ package game;
 
 public class MovingWall extends Wall {
 
-	private float velX, velY;
+	private float velX, velY, leftXBound, rightXBound, upYBound, downYBound;
 	
-	public MovingWall(float x, float y, float width, float height, float velX, float velY) {
+	public MovingWall(float x, float y, float width, float height, float velX, float velY, float leftXBound, float rightXBound, float upYBound, float downYBound) {
 		super(x, y, width, height);
 		this.velX = velX;
 		this.velY = velY;
+		this.rightXBound = rightXBound;
+		this.leftXBound = leftXBound;
+		this.upYBound = upYBound;
+		this.downYBound = downYBound;
 	}
 
 	public void update() {
 		super.update();
-		if (x + width + velX > Game.WIDTH) {
+		if (x + width + velX > rightXBound) {
 			velX = -velX;
-			x = Game.WIDTH - width;
+			x = rightXBound - width;
 		} 
-		else if (x + velX < 0) {
+		else if (x + velX < leftXBound) {
 			velX = -velX;
-			x = 0;
+			x = leftXBound;
 		} else {
 			x += velX;
 		}
-		if (y + height + velY > Game.HEIGHT) {
+		if (y + height + velY > downYBound) {
 			velY = -velY;
-			y = Game.HEIGHT - height;
+			y = downYBound - height;
 		} 
-		else if (y + velY < 0) {
+		else if (y + velY < upYBound) {
 			velY = -velY;
-			y = 0;
+			y = upYBound;
 		}
 		else {
 			y += velY;

@@ -11,7 +11,7 @@ public class Ball extends GameObject {
 	public static final int width = 50;
 
 	private float velX, velY, startX, startY;
-	private boolean inMotion = false, won = false, right = false, left = false, rightGoal = false, leftGoal = false, upGoal = false, downGoal = false, rightSpike = false, leftSpike = false, upSpike = false, downSpike = false;
+	private boolean won = false, right = false, left = false, rightGoal = false, leftGoal = false, upGoal = false, downGoal = false, rightSpike = false, leftSpike = false, upSpike = false, downSpike = false;
 	private ArrayList<Wall> walls;
 	private TreeSet<Float> wallsLeft = new TreeSet<Float>();
 	private TreeSet<Float> wallsRight = new TreeSet<Float>();
@@ -29,7 +29,7 @@ public class Ball extends GameObject {
 	}
 
 	public void update() {
-		if (inMotion) {
+
 			velY -= Game.GRAVITY;
 			if (right) {
 				velX += 0.1f;
@@ -106,7 +106,10 @@ public class Ball extends GameObject {
 			if (wallsDown.isEmpty())
 				wallsDown.add(Float.MAX_VALUE);
 			move();
-		} 
+		 
+		if (x == startX && y == startY) {
+			
+		}
 	}
 
 	public void addWall(Wall w) {
@@ -114,38 +117,33 @@ public class Ball extends GameObject {
 	}
 
 	public void draw(Graphics g) {
+		//g.setColor(new Color(0, 0, 160)); BLUE
 		g.setColor(Color.BLACK);
 		g.fillOval(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
-		if (inMotion) {
-			try {
-				System.out.println("x: " + x);
-				System.out.println("y: " + y);
-				System.out.println("velX: " + velX);
-				System.out.println("velY: " + velY);
-				System.out.println(wallsRight.first() + " Walls Right");
-				System.out.println(wallsLeft.first() + " Walls Left");
-				System.out.println(wallsUp.first() + " Walls Up");
-				System.out.println(wallsDown.first() + " Walls Down");
-			} catch (Exception e) {
-				
-			}
-			wallsLeft.clear();
-			wallsRight.clear();
-			wallsUp.clear();
-			wallsDown.clear();
-			leftGoal = false;
-			rightGoal = false;
-			upGoal = false;
-			downGoal = false;
-			leftSpike = false;
-			rightSpike = false;
-			upSpike = false;
-			downSpike = false;
+		System.out.println("x: " + x);
+		System.out.println("y: " + y);
+		System.out.println("velX: " + velX);
+		System.out.println("velY: " + velY);
+		try {
+			System.out.println(wallsRight.first() + " Walls Right");
+			System.out.println(wallsLeft.first() + " Walls Left");
+			System.out.println(wallsUp.first() + " Walls Up");
+			System.out.println(wallsDown.first() + " Walls Down");
+		} catch (Exception e) {
+			
 		}
-	}
-
-	public void setInMotion(boolean a) {
-		inMotion = a;
+		wallsLeft.clear();
+		wallsRight.clear();
+		wallsUp.clear();
+		wallsDown.clear();
+		leftGoal = false;
+		rightGoal = false;
+		upGoal = false;
+		downGoal = false;
+		leftSpike = false;
+		rightSpike = false;
+		upSpike = false;
+		downSpike = false;
 	}
 
 	private void move() {
@@ -166,7 +164,7 @@ public class Ball extends GameObject {
 				y = startY;
 				velX = 0;
 				velY = 0;
-				inMotion = false;
+				
 			}
 		}
 		if (wallsLeft.first() - velX < 0f) {
@@ -184,7 +182,7 @@ public class Ball extends GameObject {
 				y = startY;
 				velX = 0;
 				velY = 0;
-				inMotion = false;
+				
 			}
 		}
 		if (wallsUp.first() - velY < 0f) {
@@ -202,7 +200,6 @@ public class Ball extends GameObject {
 				y = startY;
 				velX = 0;
 				velY = 0;
-				inMotion = false;
 			}
 		}
 		if (wallsDown.first() + velY < 0f) {
@@ -220,7 +217,6 @@ public class Ball extends GameObject {
 				y = startY;
 				velX = 0;
 				velY = 0;
-				inMotion = false;
 			}
 		}
 		if (!xCollision)
@@ -230,7 +226,6 @@ public class Ball extends GameObject {
 	}
 
 	private void reset() { 
-		inMotion = false;
 		walls.clear();
 		velX = 0;
 		velY = 0;

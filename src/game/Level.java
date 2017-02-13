@@ -71,7 +71,7 @@ public class Level implements Comparable<Level>{
 				} else if (_order) {
 					order = input.get(0);
 				} else if (movingWall) {
-					walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
+					walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5), input.get(6), input.get(7), input.get(8), input.get(9)));
 				} else if (spike){
 					walls.addAll(Spike.makeSpikes(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
 				} else {

@@ -23,7 +23,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	private ArrayList<Level> levels;
 	private boolean left, right;
 	private int level = 0;
-	private int numberOfLevels = 4;
+	private int numberOfLevels = 5;
 	
 	public GamePanel() {
 		timer = new Timer(1000/60, this);
@@ -94,7 +94,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			timer.start();
-			ball.setInMotion(true);
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			right = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
