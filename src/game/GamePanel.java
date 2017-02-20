@@ -1,5 +1,6 @@
 package game;
 
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -21,11 +22,13 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	private Ball ball;
 	private ArrayList<Wall> walls;
 	private ArrayList<Level> levels;
-	private boolean left, right;
-	private int level = 0;
-	private int numberOfLevels = 5;
+	private boolean left, right, won, beginningGame;
+	private int level = -1;
+	private int numberOfLevels = 6;
+	private Font endFont;
 	
 	public GamePanel() {
+		endFont = new Font("Arial", Font.BOLD, 48);
 		timer = new Timer(1000/60, this);
 		manager = new ObjectManager();
 		ball = new Ball(0, 0);
@@ -51,16 +54,36 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	}
 	
 	private void update() {
-		ball.moveX(right, left);
-		manager.update();
+		if (!won && !beginningGame) {
+			ball.moveX(right, left);
+			manager.update();
+		}
 	}
 	
 	public void paintComponent(Graphics g) {	
 		super.paintComponent(g);
-		manager.draw(g);
+		if (!won && !beginningGame) {
+			manager.draw(g);
+		} else if (won) {
+			g.setFont(endFont);
+			g.drawString("You won!", 300, 200);
+		} else {
+			g.setFont(endFont);
+			g.drawString("Move with ← and →", 100, 200);
+			g.drawString("Go to the green box!", 100, 300);
+			g.drawString("Press ENTER to play!", 100, 400);
+		}
 	}
 	
 	private void makeNextLevel() {
+		if (level == -1) {
+			beginningGame = true;
+			return;
+		}
+		if (level >= numberOfLevels) {
+			won = true;
+			return;
+		}
 		try {
 			manager.add(ball);
 			ball.setStartX(levels.get(level).getStartX());
@@ -70,7 +93,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			level++;
 		}
 		catch (Exception e) {
-			System.out.println("You beat the game!");
+			System.out.println("error");
 		}
 	}
 	
@@ -94,6 +117,11 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	public void keyPressed(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_ENTER) {
 			timer.start();
+			if (beginningGame) {
+				level = 0;
+				beginningGame = false;
+				makeNextLevel();
+			}
 		} else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
 			right = true;
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {

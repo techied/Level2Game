@@ -6,7 +6,7 @@ public class Game {
 
 	public static final int WIDTH = 800;
 	public static final int HEIGHT = 800;
-	public static final float GRAVITY = -0.1f;
+	public static final float BALL_SPEED_INCREMENT = -0.1f;
 	
 	private JFrame window;
 	private GamePanel gamePanel;
@@ -24,7 +24,6 @@ public class Game {
 		window.setVisible(true);
 		window.addKeyListener(gamePanel);
 		window.addMouseListener(gamePanel);
-		gamePanel.start();
 	}
 	
 	public static void main(String[] args) {

@@ -34,6 +34,10 @@ public class ObjectManager {
 		}
 	}
 	
+	public ArrayList<GameObject> getObjects() {
+		return objects;
+	}
+	
 	public void clear() {
 		objects.clear();
 	}

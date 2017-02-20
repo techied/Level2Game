@@ -30,12 +30,12 @@ public class Ball extends GameObject {
 
 	public void update() {
 
-			velY -= Game.GRAVITY;
+			velY -= Game.BALL_SPEED_INCREMENT;
 			if (right) {
-				velX += 0.1f;
+				velX -= Game.BALL_SPEED_INCREMENT;
 			}
 			if (left) {
-				velX -= 0.1f;
+				velX += Game.BALL_SPEED_INCREMENT;
 			}
 			for (Wall wall : walls) {
 				boolean isGoal = wall instanceof Goal;
