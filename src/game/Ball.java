@@ -26,6 +26,7 @@ public class Ball extends GameObject {
 		this.velX = 0;
 		this.velY = 0;
 		walls = new ArrayList<Wall>();
+		restCollisionDetection();
 	}
 
 	public void update() {
@@ -48,8 +49,11 @@ public class Ball extends GameObject {
 						leftGoal = true;
 						leftSpike = false;
 					}
-					if (isSpike && leftD < wallsLeft.first()) {
+					else if (isSpike && leftD < wallsLeft.first()) {
 						leftSpike = true;
+						leftGoal = false;
+					} else if (leftD < wallsLeft.first()) {
+						leftSpike = false;
 						leftGoal = false;
 					}
 					wallsLeft.add(leftD);
@@ -62,8 +66,11 @@ public class Ball extends GameObject {
 						rightGoal = true;
 						rightSpike = false;
 					}
-					if (isSpike && rightD < wallsRight.first()) {
+					else if (isSpike && rightD < wallsRight.first()) {
 						rightSpike = true;
+						rightGoal = false;
+					} else if (rightD < wallsRight.first()) {
+						rightSpike = false;
 						rightGoal = false;
 					}
 					wallsRight.add(rightD);
@@ -76,8 +83,11 @@ public class Ball extends GameObject {
 						upGoal = true;
 						upSpike = false;
 					}
-					if (isSpike && upD < wallsUp.first()) {
+					else if (isSpike && upD < wallsUp.first()) {
 						upSpike = true;
+						upGoal = false;
+					} else if (upD < wallsUp.first()) {
+						upSpike = false;
 						upGoal = false;
 					}
 					wallsUp.add(upD);
@@ -90,8 +100,11 @@ public class Ball extends GameObject {
 						downGoal = true;
 						downSpike = false;
 					}
-					if (isSpike && downD < wallsDown.first()) {
+					else if (isSpike && downD < wallsDown.first()) {
 						downSpike = true;
+						downGoal = false;
+					} else if (downD < wallsDown.first()) {
+						downSpike = false;
 						downGoal = false;
 					}
 					wallsDown.add(downD);
@@ -132,10 +145,18 @@ public class Ball extends GameObject {
 		} catch (Exception e) {
 			
 		}
+		restCollisionDetection();
+	}
+
+	private void restCollisionDetection() {
 		wallsLeft.clear();
 		wallsRight.clear();
 		wallsUp.clear();
 		wallsDown.clear();
+		wallsDown.add(Float.MAX_VALUE);
+		wallsLeft.add(Float.MAX_VALUE);
+		wallsRight.add(Float.MAX_VALUE);
+		wallsUp.add(Float.MAX_VALUE);
 		leftGoal = false;
 		rightGoal = false;
 		upGoal = false;
@@ -145,7 +166,7 @@ public class Ball extends GameObject {
 		upSpike = false;
 		downSpike = false;
 	}
-
+	
 	private void move() {
 		boolean xCollision = false;
 		boolean yCollision = false;
