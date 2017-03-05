@@ -133,6 +133,7 @@ public class Ball extends GameObject {
 		//g.setColor(new Color(0, 0, 160)); BLUE
 		g.setColor(Color.BLACK);
 		g.fillOval(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
+		/*
 		System.out.println("x: " + x);
 		System.out.println("y: " + y);
 		System.out.println("velX: " + velX);
@@ -145,6 +146,7 @@ public class Ball extends GameObject {
 		} catch (Exception e) {
 			
 		}
+		*/
 		restCollisionDetection();
 	}
 

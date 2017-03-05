@@ -69,7 +69,7 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 			g.drawString("You won!", 300, 200);
 		} else {
 			g.setFont(endFont);
-			g.drawString("Move with ← and →", 100, 200);
+			g.drawString("Move with <- and ->", 100, 200);
 			g.drawString("Go to the green box!", 100, 300);
 			g.drawString("Press ENTER to play!", 100, 400);
 		}
