@@ -1,42 +1,47 @@
 package game;
 
+import com.sun.javafx.geom.Vec2f;
+import com.sun.javafx.geom.Vec4f;
+
 public class MovingWall extends Wall {
 
-	private float velX, velY, leftXBound, rightXBound, upYBound, downYBound;
+	Vec2f vel;
+	Vec4f bound;
 	
-	public MovingWall(float x, float y, float width, float height, float velX, float velY, float leftXBound, float rightXBound, float upYBound, float downYBound) {
+	MovingWall(float x, float y, float width, float height, float velX, float velY, Vec4f bound) {
 		super(x, y, width, height);
-		this.velX = velX;
-		this.velY = velY;
-		this.rightXBound = rightXBound;
-		this.leftXBound = leftXBound;
-		this.upYBound = upYBound;
-		this.downYBound = downYBound;
+		vel = new Vec2f();
+		this.bound = new Vec4f();
+		vel.x = velX;
+		vel.y = velY;
+		this.bound.x = bound.w;
+		this.bound.z = bound.x;
+        this.bound.y = bound.y;
+        this.bound.w = bound.z;
 	}
 
 	public void update() {
-		super.update();
-		if (x + width + velX > rightXBound) {
-			velX = -velX;
-			x = rightXBound - width;
-		} 
-		else if (x + velX < leftXBound) {
-			velX = -velX;
-			x = leftXBound;
-		} else {
-			x += velX;
-		}
-		if (y + height + velY > downYBound) {
-			velY = -velY;
-			y = downYBound - height;
-		} 
-		else if (y + velY < upYBound) {
-			velY = -velY;
-			y = upYBound;
-		}
-		else {
-			y += velY;
-		}
-	}
-	
+        super.update();
+        if (vector.x + size.x + vel.x > bound.x) {
+            vel.x = -vel.x;
+            vector.x = bound.x - size.x;
+        } else if (vector.x + vel.x < bound.z) {
+            vel.x = -vel.x;
+            vector.x = bound.z;
+        } else {
+            vector.x += vel.x;
+        }
+
+        if (vector.y + size.y + vel.y > bound.y) {
+            vel.y = -vel.y;
+            vector.y = bound.y - size.y;
+        } else if (vector.y + vel.y < bound.w) {
+            vel.y = -vel.y;
+            vector.y = bound.w;
+        } else {
+            vector.y += vel.y;
+        }
+
+    }
+
 }

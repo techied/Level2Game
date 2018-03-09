@@ -5,7 +5,7 @@ import java.awt.Graphics;
 
 public class Goal extends Wall{
 	
-	public Goal(float x, float y, float width, float height) {
+	Goal(float x, float y, float width, float height) {
 		super(x, y, width, height);
 	}
 
@@ -15,7 +15,7 @@ public class Goal extends Wall{
 	
 	public void draw(Graphics g) {
 		g.setColor(new Color(51 * 4 / 3, 102 * 4 / 3, 0));
-		g.fillRect(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
+		g.fillRect(Math.round(vector.x), Math.round(vector.y), Math.round(size.x), Math.round(size.y));
 	}
 	
 }

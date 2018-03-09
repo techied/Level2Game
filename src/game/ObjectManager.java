@@ -33,11 +33,7 @@ public class ObjectManager {
 			object.draw(g);
 		}
 	}
-	
-	public ArrayList<GameObject> getObjects() {
-		return objects;
-	}
-	
+
 	public void clear() {
 		objects.clear();
 	}

@@ -1,5 +1,7 @@
 package game;
 
+import com.sun.javafx.geom.Vec4f;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -12,12 +14,12 @@ public class Level implements Comparable<Level>{
 	private float startX, startY;
 	private float order;
 	
-	public Level(String fp) {
+	Level(String fp) {
 		
 		BufferedReader br = null;
 		FileReader fr = null;
 		
-		walls = new ArrayList<Wall>();
+		walls = new ArrayList<>();
 		walls.add(new Wall(0, Game.HEIGHT, Game.WIDTH, Ball.height));
 		walls.add(new Wall(-Ball.width, 0, Ball.width, Game.WIDTH));
 		walls.add(new Wall(Game.WIDTH, 0, Ball.width, Game.HEIGHT));
@@ -37,13 +39,13 @@ public class Level implements Comparable<Level>{
 				boolean movingWall = false;
 				boolean _order = false;
 				boolean spike = false;
-				String currentNumber = "";
-				ArrayList<Float> input = new ArrayList<Float>();
+				StringBuilder currentNumber = new StringBuilder();
+				ArrayList<Float> input = new ArrayList<>();
 				for (int i = 0; i < currentLine.length(); i++) {
 					char currentChar = currentLine.charAt(i);
 					if (currentChar == ' ') {
-						input.add(Float.parseFloat(currentNumber));
-						currentNumber = "";
+						input.add(Float.parseFloat(currentNumber.toString()));
+						currentNumber = new StringBuilder();
 					} else if (currentChar == 'g') {
 						goal = true;
 					} else if (currentChar == 'x') {
@@ -56,10 +58,8 @@ public class Level implements Comparable<Level>{
 						_order = true;
 					} else if (currentChar == 's') {
 						spike = true;
-					} else if (currentChar == 'w') {
-						
 					} else {
-						currentNumber += currentChar;
+						currentNumber.append(currentChar);
 					}
 				}
 				if (goal) {
@@ -71,7 +71,7 @@ public class Level implements Comparable<Level>{
 				} else if (_order) {
 					order = input.get(0);
 				} else if (movingWall) {
-					walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5), input.get(6), input.get(7), input.get(8), input.get(9)));
+					walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5), new Vec4f(input.get(6), input.get(7), input.get(8), input.get(9))));
 				} else if (spike){
 					walls.addAll(Spike.makeSpikes(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
 				} else {
@@ -113,14 +113,13 @@ public class Level implements Comparable<Level>{
 		return startY;
 	}
 	
-	public float getOrder() {
+	private float getOrder() {
 		return order;
 	}
 
 	@Override
 	public int compareTo(Level o) {
-		float compareOrder = ((Level) o).getOrder();
-		return Math.round(this.order - compareOrder);
+		return Math.round(this.order - o.getOrder());
 	}
 	
 }

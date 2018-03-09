@@ -27,18 +27,18 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	private int numberOfLevels = 6;
 	private Font endFont;
 	
-	public GamePanel() {
+	GamePanel() {
 		endFont = new Font("Arial", Font.BOLD, 48);
 		timer = new Timer(1000/60, this);
 		manager = new ObjectManager();
 		ball = new Ball(0, 0);
-		walls = new ArrayList<Wall>();
+		walls = new ArrayList<>();
 		makeLevels();
 		makeNextLevel();
 	}
 	
 	private void makeLevels() {
-		levels = new ArrayList<Level>();
+		levels = new ArrayList<>();
 		for (int i = 1; i <= numberOfLevels; i++) {
 			Level level = new Level("levels/level" + Integer.toString(i) + ".txt");
 			levels.add(level);
@@ -142,10 +142,6 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
 			left = false;
 		} 
-	}
-
-	public void start() {
-		timer.start();
 	}
 
 	@Override

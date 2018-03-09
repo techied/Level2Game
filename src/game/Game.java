@@ -1,6 +1,6 @@
 package game;
 
-import javax.swing.JFrame;
+import javax.swing.*;
 
 public class Game {
 
@@ -19,7 +19,7 @@ public class Game {
 	}
 	
 	private void setup() {
-		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		window.setSize(WIDTH, HEIGHT + 23);
 		window.setVisible(true);
 		window.addKeyListener(gamePanel);

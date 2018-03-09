@@ -21,8 +21,8 @@ public class Ball extends GameObject {
 	private float yDefraction = 1.0f;
 	
 	public Ball(float x, float y) {
-		this.x = x;
-		this.y = y;
+		vector.x = x;
+		vector.y = y;
 		this.velX = 0;
 		this.velY = 0;
 		walls = new ArrayList<Wall>();
@@ -41,10 +41,10 @@ public class Ball extends GameObject {
 			for (Wall wall : walls) {
 				boolean isGoal = wall instanceof Goal;
 				boolean isSpike = wall instanceof Spike;
-				if (((wall.getY1() > y && wall.getY1() < y + height)
-						|| (wall.getY2() > y && wall.getY2() < y + height)
-						|| (y > wall.getY1() && y + height < wall.getY2()))) {
-					float leftD = Math.abs(wall.getX1() - x - width);
+				if (((wall.getY1() > vector.y && wall.getY1() < vector.y + height)
+						|| (wall.getY2() > vector.y && wall.getY2() < vector.y + height)
+						|| (vector.y > wall.getY1() && vector.y + height < wall.getY2()))) {
+					float leftD = Math.abs(wall.getX1() - vector.x - width);
 					if (isGoal && leftD < wallsLeft.first()) {
 						leftGoal = true;
 						leftSpike = false;
@@ -58,10 +58,10 @@ public class Ball extends GameObject {
 					}
 					wallsLeft.add(leftD);
 				}
-				if (((wall.getY1() > y && wall.getY1() < y + height)
-						|| (wall.getY2() > y && wall.getY2() < y + height)
-						|| (y > wall.getY1() && y + height < wall.getY2()))) {
-					float rightD = Math.abs(x - wall.getX2());
+				if (((wall.getY1() > vector.y && wall.getY1() < vector.y + height)
+						|| (wall.getY2() > vector.y && wall.getY2() < vector.y + height)
+						|| (vector.y > wall.getY1() && vector.y + height < wall.getY2()))) {
+					float rightD = Math.abs(vector.x - wall.getX2());
 					if (isGoal && rightD < wallsRight.first()) {
 						rightGoal = true;
 						rightSpike = false;
@@ -75,10 +75,10 @@ public class Ball extends GameObject {
 					}
 					wallsRight.add(rightD);
 				}
-				if (((wall.getX1() > x && wall.getX1() < x + width)
-						|| (wall.getX2() > x && wall.getX2() < x + width)
-						|| (x > wall.getX1() && x + width < wall.getX2()))) {
-					float upD = Math.abs(wall.getY1() - y - height);
+				if (((wall.getX1() > vector.x && wall.getX1() < vector.x + width)
+						|| (wall.getX2() > vector.x && wall.getX2() < vector.x + width)
+						|| (vector.x > wall.getX1() && vector.x + width < wall.getX2()))) {
+					float upD = Math.abs(wall.getY1() - vector.y - height);
 					if (isGoal && upD < wallsUp.first()) {
 						upGoal = true;
 						upSpike = false;
@@ -92,10 +92,10 @@ public class Ball extends GameObject {
 					}
 					wallsUp.add(upD);
 				}
-				if (((wall.getX1() > x && wall.getX1() < x + width)
-						|| (wall.getX2() > x && wall.getX2() < x + width)
-						|| (x > wall.getX1() && x + width < wall.getX2()))) {
-					float downD = Math.abs(y - wall.getY2());
+				if (((wall.getX1() > vector.x && wall.getX1() < vector.x + width)
+						|| (wall.getX2() > vector.x && wall.getX2() < vector.x + width)
+						|| (vector.x > wall.getX1() && vector.x + width < wall.getX2()))) {
+					float downD = Math.abs(vector.y - wall.getY2());
 					if (isGoal && downD < wallsDown.first()) {
 						downGoal = true;
 						downSpike = false;
@@ -120,7 +120,7 @@ public class Ball extends GameObject {
 				wallsDown.add(Float.MAX_VALUE);
 			move();
 		 
-		if (x == startX && y == startY) {
+		if (vector.x == startX && vector.y == startY) {
 			
 		}
 	}
@@ -132,7 +132,7 @@ public class Ball extends GameObject {
 	public void draw(Graphics g) {
 		//g.setColor(new Color(0, 0, 160)); BLUE
 		g.setColor(Color.BLACK);
-		g.fillOval(Math.round(x), Math.round(y), Math.round(width), Math.round(height));
+		g.fillOval(Math.round(vector.x), Math.round(vector.y), Math.round(width), Math.round(height));
 		/*
 		System.out.println("x: " + x);
 		System.out.println("y: " + y);
@@ -173,7 +173,7 @@ public class Ball extends GameObject {
 		boolean xCollision = false;
 		boolean yCollision = false;
 		if (wallsRight.first() + velX < 0f) {
-			x -= wallsRight.first();
+			vector.x -= wallsRight.first();
 			velX = -velX;
 			velX *= xDefraction;
 			xCollision = true;
@@ -183,15 +183,15 @@ public class Ball extends GameObject {
 				return;
 			}
 			if (rightSpike) {
-				x = startX;
-				y = startY;
+				vector.x = startX;
+				vector.y = startY;
 				velX = 0;
 				velY = 0;
 				
 			}
 		}
 		if (wallsLeft.first() - velX < 0f) {
-			x += wallsLeft.first();
+			vector.x += wallsLeft.first();
 			velX = -velX;
 			velX *= xDefraction;
 			xCollision = true;
@@ -201,15 +201,15 @@ public class Ball extends GameObject {
 				return;
 			}
 			if (leftSpike) {
-				x = startX;
-				y = startY;
+				vector.x = startX;
+				vector.y = startY;
 				velX = 0;
 				velY = 0;
 				
 			}
 		}
 		if (wallsUp.first() - velY < 0f) {
-			y += wallsUp.first();
+			vector.y += wallsUp.first();
 			velY = -velY;
 			velY *= yDefraction;
 			yCollision = true;
@@ -219,14 +219,14 @@ public class Ball extends GameObject {
 				return;
 			}
 			if (upSpike) {
-				x = startX;
-				y = startY;
+				vector.x = startX;
+				vector.y = startY;
 				velX = 0;
 				velY = 0;
 			}
 		}
 		if (wallsDown.first() + velY < 0f) {
-			y -= wallsDown.first();
+			vector.y -= wallsDown.first();
 			velY = -velY;
 			velY *= yDefraction;
 			yCollision = true;
@@ -236,16 +236,16 @@ public class Ball extends GameObject {
 				return;
 			}
 			if (downSpike) {
-				x = startX;
-				y = startY;
+				vector.x = startX;
+				vector.y = startY;
 				velX = 0;
 				velY = 0;
 			}
 		}
 		if (!xCollision)
-			x += velX;
+			vector.x += velX;
 		if (!yCollision)
-			y += velY;
+			vector.y += velY;
 	}
 
 	private void reset() { 
@@ -269,12 +269,12 @@ public class Ball extends GameObject {
 	
 	public void setStartX(float x) {
 		startX = x;
-		this.x = x;
+		this.vector.x = x;
 	}
 	
 	public void setStartY(float y) {
 		startY = y;
-		this.y = y;
+		this.vector.y = y;
 	}
 
 }
