@@ -1,13 +1,11 @@
 package game;
 
-import com.sun.javafx.geom.Vec2f;
-
 import java.awt.Color;
 import java.awt.Graphics;
 
 public class Wall extends GameObject {
 
-    public Wall(float x, float y, float width, float height) {
+    Wall(float x, float y, float width, float height) {
         vector.x = x;
         vector.y = y;
         size.x = width;

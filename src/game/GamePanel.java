@@ -28,8 +28,9 @@ public class GamePanel extends JPanel implements KeyListener, ActionListener, Mo
 	private Font endFont;
 	
 	GamePanel() {
-		endFont = new Font("Arial", Font.BOLD, 48);
-		timer = new Timer(1000/60, this);
+		//endFont = new Font("Arial", Font.BOLD, 48);
+		endFont = new Font("Comic Sans MS", Font.BOLD, 48);
+        timer = new Timer(1000/60, this);
 		manager = new ObjectManager();
 		ball = new Ball(0, 0);
 		walls = new ArrayList<>();

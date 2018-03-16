@@ -8,10 +8,10 @@ public class GameObject {
 
     Vec2f vector;
     Vec2f size;
-    protected boolean isAlive;
+    private boolean isAlive;
 
 
-    public GameObject() {
+    GameObject() {
         vector = new Vec2f();
         size = new Vec2f();
         isAlive = true;
@@ -28,10 +28,6 @@ public class GameObject {
     }
 
     public void draw(Graphics g) {
-    }
-
-    public void reverseDirection() {
-
     }
 
     public void setX(float x) {

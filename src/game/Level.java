@@ -14,6 +14,7 @@ public class Level implements Comparable<Level>{
 	private float startX, startY;
 	private float order;
 	
+
 	Level(String fp) {
 		
 		BufferedReader br = null;
@@ -33,51 +34,8 @@ public class Level implements Comparable<Level>{
 			String currentLine;
 			
 			while ((currentLine = br.readLine()) != null) {
-				boolean goal = false;
-				boolean x = false;
-				boolean y = false;
-				boolean movingWall = false;
-				boolean _order = false;
-				boolean spike = false;
-				StringBuilder currentNumber = new StringBuilder();
-				ArrayList<Float> input = new ArrayList<>();
-				for (int i = 0; i < currentLine.length(); i++) {
-					char currentChar = currentLine.charAt(i);
-					if (currentChar == ' ') {
-						input.add(Float.parseFloat(currentNumber.toString()));
-						currentNumber = new StringBuilder();
-					} else if (currentChar == 'g') {
-						goal = true;
-					} else if (currentChar == 'x') {
-						x = true;
-					} else if (currentChar == 'y') {
-						y = true;
-					} else if (currentChar == 'm') {
-						movingWall = true;
-					} else if (currentChar == 'o') {
-						_order = true;
-					} else if (currentChar == 's') {
-						spike = true;
-					} else {
-						currentNumber.append(currentChar);
-					}
-				}
-				if (goal) {
-					walls.add(new Goal(input.get(0), input.get(1), input.get(2), input.get(3)));
-				} else if (x) {
-					startX = input.get(0);
-				} else if (y) {
-					startY = input.get(0);
-				} else if (_order) {
-					order = input.get(0);
-				} else if (movingWall) {
-					walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5), new Vec4f(input.get(6), input.get(7), input.get(8), input.get(9))));
-				} else if (spike){
-					walls.addAll(Spike.makeSpikes(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
-				} else {
-					walls.add(new Wall(input.get(0), input.get(1), input.get(2), input.get(3)));
-				}
-				
+                readLevel(currentLine);
+
 			}
 			
 			
@@ -100,8 +58,56 @@ public class Level implements Comparable<Level>{
 			}
 		}
 	}
-	
-	public ArrayList<Wall> getWalls() {
+
+    private void readLevel(String currentLine) {
+        boolean goal = false;
+        boolean x = false;
+        boolean y = false;
+        boolean movingWall = false;
+        boolean _order = false;
+        boolean spike = false;
+        StringBuilder currentNumber = new StringBuilder();
+        ArrayList<Float> input = new ArrayList<>();
+        for (int i = 0; i < currentLine.length(); i++) {
+            char currentChar = currentLine.charAt(i);
+            if (currentChar == ' ') {
+                input.add(Float.parseFloat(currentNumber.toString()));
+                currentNumber = new StringBuilder();
+            } else if (currentChar == 'g') {
+                goal = true;
+            } else if (currentChar == 'x') {
+                x = true;
+            } else if (currentChar == 'y') {
+                y = true;
+            } else if (currentChar == 'm') {
+                movingWall = true;
+            } else if (currentChar == 'o') {
+                _order = true;
+            } else if (currentChar == 's') {
+                spike = true;
+            } else {
+                currentNumber.append(currentChar);
+            }
+        }
+
+        if (goal) {
+            walls.add(new Goal(input.get(0), input.get(1), input.get(2), input.get(3)));
+        } else if (x) {
+            startX = input.get(0);
+        } else if (y) {
+            startY = input.get(0);
+        } else if (_order) {
+            order = input.get(0);
+        } else if (movingWall) {
+            walls.add(new MovingWall(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5), new Vec4f(input.get(6), input.get(7), input.get(8), input.get(9))));
+        } else if (spike){
+            walls.addAll(Spike.makeSpikes(input.get(0), input.get(1), input.get(2), input.get(3), input.get(4), input.get(5)));
+        } else {
+            walls.add(new Wall(input.get(0), input.get(1), input.get(2), input.get(3)));
+        }
+    }
+
+    public ArrayList<Wall> getWalls() {
 		return walls;
 	}
 	

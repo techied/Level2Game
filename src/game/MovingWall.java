@@ -5,8 +5,8 @@ import com.sun.javafx.geom.Vec4f;
 
 public class MovingWall extends Wall {
 
-	Vec2f vel;
-	Vec4f bound;
+	private Vec2f vel;
+	private Vec4f bound;
 	
 	MovingWall(float x, float y, float width, float height, float velX, float velY, Vec4f bound) {
 		super(x, y, width, height);

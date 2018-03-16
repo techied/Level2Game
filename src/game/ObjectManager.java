@@ -7,8 +7,8 @@ public class ObjectManager {
 
 	private ArrayList<GameObject> objects;
 	
-	public ObjectManager() {
-		objects = new ArrayList<GameObject>();
+	ObjectManager() {
+		objects = new ArrayList<>();
 	}
 	
 	public void add(GameObject o) {

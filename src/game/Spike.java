@@ -9,7 +9,7 @@ public class Spike extends Wall {
 	private int[] xPoints, yPoints;
 	private static final int nPoints = 3;
 	//x, y, width , height define the spikes hitbox
-	public Spike(int[] xPoints, int[] yPoints, int x, int y, int width, int height) {
+	private Spike(int[] xPoints, int[] yPoints, int x, int y, int width, int height) {
 		super(x, y, width, height);
 		this.xPoints = xPoints;
 		this.yPoints = yPoints;
@@ -25,7 +25,7 @@ public class Spike extends Wall {
 	// 2 -> up
 	// 3 -> down
 	public static ArrayList<Wall> makeSpikes(float x, float y, float width, float height, float nSpikes, float direction) {
-		ArrayList<Wall> spikes = new ArrayList<Wall>();
+		ArrayList<Wall> spikes = new ArrayList<>();
 		if (direction >= 2) {
 			width /= nSpikes;
 		}
