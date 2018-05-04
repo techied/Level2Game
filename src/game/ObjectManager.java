@@ -1,41 +1,41 @@
 package game;
 
-import java.awt.Graphics;
+import java.awt.*;
 import java.util.ArrayList;
 
-public class ObjectManager {
+class ObjectManager {
 
-	private ArrayList<GameObject> objects;
-	
-	ObjectManager() {
-		objects = new ArrayList<>();
-	}
-	
-	public void add(GameObject o) {
-		objects.add(o);
-	}
-	
-	public void update() {
+    private ArrayList<GameObject> objects;
 
-		for (GameObject object : objects) {
-			object.update();
-		}
-		for (int i = 0; i < objects.size(); i++) {
-			if (objects.get(i).isDead()) {
-				objects.remove(i);
-				i--;
-			}
-		}
-	}
-	
-	public void draw(Graphics g) {
-		for (GameObject object : objects) {
-			object.draw(g);
-		}
-	}
+    ObjectManager() {
+        objects = new ArrayList<>();
+    }
 
-	public void clear() {
-		objects.clear();
-	}
-	
+    void add(GameObject o) {
+        objects.add(o);
+    }
+
+    void update() {
+
+        for (GameObject object : objects) {
+            object.update();
+        }
+        for (int i = 0; i < objects.size(); i++) {
+            if (objects.get(i).isDead()) {
+                objects.remove(i);
+                i--;
+            }
+        }
+    }
+
+    void draw(Graphics g) {
+        for (GameObject object : objects) {
+            object.draw(g);
+        }
+    }
+
+    void clear() {
+        objects.clear();
+    }
+
 }

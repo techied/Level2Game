@@ -5,22 +5,22 @@ import com.sun.javafx.geom.Vec4f;
 
 public class MovingWall extends Wall {
 
-	private Vec2f vel;
-	private Vec4f bound;
-	
-	MovingWall(float x, float y, float width, float height, float velX, float velY, Vec4f bound) {
-		super(x, y, width, height);
-		vel = new Vec2f();
-		this.bound = new Vec4f();
-		vel.x = velX;
-		vel.y = velY;
-		this.bound.x = bound.w;
-		this.bound.z = bound.x;
+    private Vec2f vel;
+    private Vec4f bound;
+
+    MovingWall(float x, float y, float width, float height, float velX, float velY, Vec4f bound) {
+        super(x, y, width, height);
+        vel = new Vec2f();
+        this.bound = new Vec4f();
+        vel.x = velX;
+        vel.y = velY;
+        this.bound.x = bound.w;
+        this.bound.z = bound.x;
         this.bound.y = bound.y;
         this.bound.w = bound.z;
-	}
+    }
 
-	public void update() {
+    public void update() {
         super.update();
         if (vector.x + size.x + vel.x > bound.x) {
             vel.x = -vel.x;

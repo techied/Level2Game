@@ -1,7 +1,6 @@
 package game;
 
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
 
 public class Wall extends GameObject {
 
@@ -21,19 +20,19 @@ public class Wall extends GameObject {
         g.fillRect(Math.round(vector.x), Math.round(vector.y), Math.round(size.x), Math.round(size.y));
     }
 
-    public float getX1() {
+    float getX1() {
         return vector.x;
     }
 
-    public float getX2() {
+    float getX2() {
         return vector.x + size.x;
     }
 
-    public float getY1() {
+    float getY1() {
         return vector.y;
     }
 
-    public float getY2() {
+    float getY2() {
         return vector.y + size.y;
     }
 

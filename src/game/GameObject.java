@@ -2,7 +2,7 @@ package game;
 
 import com.sun.javafx.geom.Vec2f;
 
-import java.awt.Graphics;
+import java.awt.*;
 
 public class GameObject {
 
@@ -23,7 +23,7 @@ public class GameObject {
         }
     }
 
-    public boolean isDead() {
+    boolean isDead() {
         return !isAlive;
     }
 
